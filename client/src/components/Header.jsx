@@ -2,10 +2,10 @@ import React from 'react'
 import { AppBar, Toolbar, styled, InputBase, Box } from '@mui/material';
 import { GmailLogo } from '../constants/constants.js'
 import { Tune, HelpOutline, Apps, Search, Menu, SettingsOutlined, AccountCircleOutlined } from '@mui/icons-material';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
-const styleAppbar = styled(AppBar)({
-  background: 'F5F5F5',
+const StyleAppbar = styled(AppBar)({
+  background:'#F5F5F5',
+  boxShadow:'none'
 })
 
 const SearchWrapper = styled(Box)({
@@ -25,29 +25,34 @@ const OptionWrapper = styled(Box)({
   width:'100%',
   display:'flex',
   alignItems:'center',
-  justifyContent:'flex-end'
+  justifyContent:'flex-end',
+  '& > svg': {
+    marginLeft:15,
+    fontSize:25,
+    color:'#615757'
+  }
 })
 
 
-function Header() {
+function Header({toggleDrawer}) {
   return (
-    <styleAppbar>
+    <StyleAppbar>
       <Toolbar>
-        <Menu />
+        <Menu color='action' onClick={toggleDrawer} />
         <img src={GmailLogo} alt="" srcset="" width={120} style={{ marginLeft: 10 }} />
         <SearchWrapper>
-          <Search />
+          <Search color='action'/>
           <InputBase fullWidth placeholder='Search Mail' id="fullWidth" style={{ margin: 5 }} />
-          <Tune />
+          <Tune color='action'/>
         </SearchWrapper>
         <OptionWrapper>
-          <HelpOutline style={{margin:5}}/>
-          <SettingsOutlined style={{margin:5}}/>
-          <Apps style={{margin:5}}/>
-          <AccountCircleOutlined style={{margin:5}}/>
+          <HelpOutline/>
+          <SettingsOutlined/>
+          <Apps/>
+          <AccountCircleOutlined/>
         </OptionWrapper>
       </Toolbar>
-    </styleAppbar>
+    </StyleAppbar>
   )
 }
 
