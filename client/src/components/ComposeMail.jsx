@@ -63,10 +63,10 @@ function ComposeMail({handleClose}) {
         if(window.Email) {
             window.Email.send({
                 ...config,
-                To : 'talkwithadarsh@gmail.com',
+                To : to,
                 From : "00adarshrawat00@gmail.com",
-                Subject : "This is the subject",
-                Body : "And this is the body"
+                Subject : subject,
+                Body : message,
             }).then(
               message => {
                 alert(message);
@@ -87,9 +87,9 @@ function ComposeMail({handleClose}) {
             <Close fontSize='small' onClick={closeComposeMail}/>            
         </Header>
         <RecipientWrapper>
-            <InputBase variant="standard" placeholder='To' name='to' onChange={(e)=>{setTo(...to, e.target.value)}}/>
-            <InputBase placeholder='Subject' onChange={(e)=>{setSubject(...subject, e.target.value)}}/>
-            <TextField multiline rows={30} onChange={(e)=>{setMessage(...message, e.target.value)}} sx={{'& .MuiOutlinedInput-notchedOutline': {border:'none'}}} />
+            <InputBase variant="standard" placeholder='To' name='to' onChange={(e)=>{setTo(e.target.value)}}/>
+            <InputBase placeholder='Subject' onChange={(e)=>{setSubject(e.target.value)}}/>
+            <TextField multiline rows={30} onChange={(e)=>{setMessage(e.target.value)}} sx={{'& .MuiOutlinedInput-notchedOutline': {border:'none'}}} />
         </RecipientWrapper>
         <Footer>
             <SendButton onClick={(e)=>sendMail(e)}>Send</SendButton>
