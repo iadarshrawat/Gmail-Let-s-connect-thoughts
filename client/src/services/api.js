@@ -1,12 +1,13 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
+const API_URI = 'http://localhost:8000'
 
-const API_GMAIL = async () => {
+const API_GMAIL = async (serviceUrlObject, requestData = {}) => {
+
     return await axios({
-        method:'delete',
-        url: `${API_URL}/endpoint`,
-        data: {}
+        method: serviceUrlObject.method,
+        url: `${API_URI}/${serviceUrlObject.endpoint}`,
+        data: requestData
     })
 }
 

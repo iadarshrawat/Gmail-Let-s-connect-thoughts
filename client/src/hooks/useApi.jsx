@@ -1,27 +1,28 @@
-import { useState } from "react";
-import API from "../services/api";
+import { useState } from 'react';
+import API from '../services/api';
 
-const useApi = ()=>{
-
+const useApi = (urlObject) => {
     const [response, setResponse] = useState(null);
-    const [error ,setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    const call = async ()=>{
-
-        setIsLoading(true)
-
+    const call = async (payload, type = '') => {
+        setResponse(null);
+        setIsLoading(true);
+        setError("");
+        
         try {
-            let res = await API();
-            setResponse(res.data)
-            
+            console.log(payload)
+            let res = await API(urlObject, payload);
+            setResponse(res.data);
         } catch (error) {
-            setError(error.message)
+            setError(error.message);
         } finally {
             setIsLoading(false);
         }
     }
-    return {call, response, error, isLoading};
+
+    return { call, response, error, isLoading };
 }
 
 export default useApi;

@@ -1,6 +1,8 @@
 import { Close, DeleteOutline} from '@mui/icons-material'
 import { Box, InputBase, TextField, Typography, styled, Button } from '@mui/material'
 import React, { useState } from 'react'
+import useApi from '../hooks/useApi'
+import { API_URLS } from '../services/api.urls'
 
 const Header = styled(Box)({
     display:'flex',
@@ -40,6 +42,11 @@ const SendButton = styled(Button)({
 
 function ComposeMail({handleClose}) {
 
+    const [data, setData] = useState({});
+
+    const sentEmailService = useApi(API_URLS.saveSentEmails);
+
+
     const config = {
         Host : "smtp.elasticemail.com",
         Username : '00adarshrawat00@gmail.com',
@@ -47,34 +54,59 @@ function ComposeMail({handleClose}) {
         Port:2525,
     }
 
-    const [to, setTo] = useState();
-    const [message, setMessage] = useState();
-    const [subject, setSubject] = useState();
-
-    const closeComposeMail = (e)=>{
-        e.preventDefault();
-        handleClose();
+    
+    const onValueChange = (e)=>{
+        setData({...data, [e.target.name] : e.target.value})
     }
 
-    const sendMail = (e)=>{
+
+    const sendMail = async (e)=>{
         
         e.preventDefault();
 
         if(window.Email) {
             window.Email.send({
                 ...config,
-                To : to,
+                To : data.to,
                 From : "00adarshrawat00@gmail.com",
-                Subject : subject,
-                Body : message,
+                Subject : data.subject,
+                Body : data.body,
             }).then(
-              message => {
-                alert(message);
-            }
+              message => alert(message)
             );
+        }
+
+        const payload = {
+            to : data.to,
+            from : "00adarshrawat00@gmail.com",
+            subject : data.subject,
+            body : data.body,
+            date: new Date(),
+            image: '',
+            name: 'Adarsh',
+            starred: false,
+            type: 'sent'
+        }
+        
+        console.log(payload)
+        
+        sentEmailService.call(payload);
+
+        if(!sentEmailService.error) {
             handleClose();
+            setData({})
+        } else {
+              
         }
     }
+
+
+    const closeComposeMail = (e)=>{
+        e.preventDefault();
+        handleClose();
+    }
+
+
     const deleteMail = (e)=>{
         e.preventDefault();
         handleClose();
@@ -87,12 +119,12 @@ function ComposeMail({handleClose}) {
             <Close fontSize='small' onClick={closeComposeMail}/>            
         </Header>
         <RecipientWrapper>
-            <InputBase variant="standard" placeholder='To' name='to' onChange={(e)=>{setTo(e.target.value)}}/>
-            <InputBase placeholder='Subject' onChange={(e)=>{setSubject(e.target.value)}}/>
-            <TextField multiline rows={30} onChange={(e)=>{setMessage(e.target.value)}} sx={{'& .MuiOutlinedInput-notchedOutline': {border:'none'}}} />
+            <InputBase variant="standard" placeholder='To' name='to' onChange={(e)=>onValueChange(e)}/>
+            <InputBase placeholder='Subject' name='subject' onChange={(e)=>onValueChange(e)}/>
+            <TextField multiline rows={30} name='body' onChange={(e)=>onValueChange(e)} sx={{'& .MuiOutlinedInput-notchedOutline': {border:'none'}}} />
         </RecipientWrapper>
         <Footer>
-            <SendButton onClick={(e)=>sendMail(e)}>Send</SendButton>
+            <SendButton onClick={sendMail}>Send</SendButton>
             <DeleteOutline onClick={deleteMail}/>
         </Footer>
     </Box>
